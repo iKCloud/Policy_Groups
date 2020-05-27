@@ -1,0 +1,45 @@
+[Proxy]
+Direct in = direct
+Reject out = reject
+Tiny GIF = reject-tinygif
+
+[Proxy Group]
+Dler® Cloud㍿ = url-test, url=http://cp.cloudflare.com/generate_204, policy-path=https://dler.cloud/subscribe/qwertyuiop?protocols=ss&list=surge&lv=6&area=hk, update-interval=3600, timeout=10, interval=3600, tolerance=100, evaluate-before-use=true
+Apple服务 = select, Direct in, Dler® Cloud㍿
+⌥Domestic = select, Direct in, Dler® Cloud㍿
+⌫Reject = select, Reject out, Tiny GIF, Direct in
+Netease ♪ = select, url=http://music.163.com, policy-path=Proxies/NeteaseUnlock.txt, update-interval=0
+⌘流媒体 = select, policy-path=https://dler.cloud/subscribe/qwertyuiop?protocols=ss&list=surge&lv=6, update-interval=3600
+↻GameR = select, policy-path=https://dler.cloud/subscribe/qwertyuiop?protocols=ssr&list=surge&type=gamer, update-interval=0
+♬Spotify = load-balance, persistent=1, policy-path=https://dler.cloud/subscribe/qwertyuiop?protocols=vmess&list=surge&lv=6&isp=iplc&area=hk, update-interval=3600
+Telegram℡ = url-test, url=http://cp.cloudflare.com/generate_204, policy-path=https://dler.cloud/subscribe/qwertyuiop?protocols=ss&list=surge&area=sg&isp=iplc, update-interval=3600, timeout=10, interval=3600, tolerance=100, evaluate-before-use=true
+◎YouTube = fallback, url=http://cp.cloudflare.com/generate_204, policy-path=https://dler.cloud/subscribe/qwertyuiop?protocols=trojan&list=surge&lv=6&isp=ctm, update-interval=3600
+Speedtest™ = select, policy-path=https://dler.cloud/subscribe/qwertyuiop?protocols=ss&list=surge&lv=6, update-interval=3600
+°Finally = select, Dler® Cloud㍿, Direct in
+
+[Rule]
+# > Reject
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Reject.list,⌫Reject
+DOMAIN-SET,https://anti-ad.win/domains.txt,⌫Reject
+# > Special
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Special.list,⌥Domestic
+# > Selected Media
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Media/BBC%20iPlayer.list,⌘流媒体
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Media/Netease%20Music.list,Netease ♪
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Media/Spotify.list,♬Spotify
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Media/Pornhub.list,⌘流媒体
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Media/YouTube.list,◎YouTube
+# > Selected Proxy
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Telegram.list,Telegram℡
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Steam.list,↻GameR
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Speedtest.list,Speedtest™
+# > Proxy and Direct
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Proxy.list,Dler® Cloud㍿
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Domestic.list,⌥Domestic
+RULE-SET,https://raw.githubusercontent.com/lhie1/Rules/master/Surge/Surge%203/Provider/Apple.list,Apple服务
+# > System and LAN
+RULE-SET,SYSTEM,Apple服务
+RULE-SET,LAN,⌥Domestic
+# > GEOIP and Final
+GEOIP,CN,⌥Domestic
+FINAL,°Finally,dns-failed
